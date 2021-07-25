@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -66,6 +67,7 @@ public class RandomNumberGameService {
 		return mainNumber;
 	}
 
+	@Retryable(value = ResourceAccessException.class, maxAttempts = NO_OF_MAXIMUM_TRIALS)
 	public void callOtherPlayer(int number) throws Exception {
 		try {
 			int port = playerNumber == 1 ? player2ServiceInstancePort : player1ServiceInstancePort;
